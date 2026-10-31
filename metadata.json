@@ -1,0 +1,6 @@
+{
+  "name": "CodeCare - Ứng dụng Theo dõi và Hỗ trợ Học sinh Lập trình",
+  "description": "Hệ thống hỗ trợ giáo viên phát hiện sớm khó khăn của học sinh học lập trình dựa trên bài nộp, kết quả kiểm thử và can thiệp sư phạm.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
