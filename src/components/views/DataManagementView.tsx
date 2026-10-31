@@ -64,23 +64,21 @@ export const DataManagementView: React.FC<DataManagementViewProps> = ({
         if (!validation.valid) {
           setImportStatus({
             success: false,
-            message: `Lỗi định dạng: ${validation.errors.slice(0, 3).join('; ')}`,
+            message: `Lỗi định dạng: ${validation.errors.slice(0, 5).join('; ')}`,
           });
           return;
         }
 
+        // Preview confirm
+        if (!window.confirm(`Đã xác thực ${parsed.length} hồ sơ hợp lệ. Bạn có muốn nạp dữ liệu này và ghi đè dữ liệu hiện tại không?`)) {
+          return;
+        }
+
         StorageService.saveLearnersRaw(parsed);
-        StorageService.addLog('IMPORT_DATA', `Nạp thành công ${parsed.length} hồ sơ từ tệp ${file.name}`, undefined, 'Giáo viên');
-        setImportStatus({
-          success: true,
-          message: `Đã nạp thành công ${parsed.length} hồ sơ học sinh vào hệ thống.`,
-        });
+        setImportStatus({ success: true, message: `Nạp thành công ${parsed.length} hồ sơ.` });
         onDataReloaded();
       } catch (err: any) {
-        setImportStatus({
-          success: false,
-          message: `Không thể đọc tệp JSON: ${err.message}`,
-        });
+        setImportStatus({ success: false, message: `Lỗi tệp: ${err.message}` });
       }
     };
     reader.readAsText(file);

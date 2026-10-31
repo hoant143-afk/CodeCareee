@@ -34,14 +34,14 @@ export class AnalyticsService {
         alertReasons.push(`Kết quả kiểm thử giảm đột ngột ${drop}% so với tuần trước (${prevWeek.testPassRate}% → ${latestWeek.testPassRate}%)`);
       }
 
-      // Evidence 3: High compiler syntax/logic errors
+    // Evidence 3: High compiler syntax/logic errors (Total for the week)
       const totalErrors = latestWeek.syntaxErrors + latestWeek.logicErrors;
       if (totalErrors >= thresholds.maxConsecutiveErrors) {
         riskScore += 25;
         alertReasons.push(`Ghi nhận ${totalErrors} lần gặp lỗi biên dịch & logic ở tuần ${latestWeek.week} (ngưỡng: ${thresholds.maxConsecutiveErrors})`);
       }
 
-      // Evidence 4: Low practice hours or submissions
+      // Evidence 4: Low practice hours
       if (latestWeek.practiceHours < 2.0) {
         riskScore += 15;
         alertReasons.push(`Thời lượng thực hành ít (${latestWeek.practiceHours}h/tuần), nguy cơ hổng kiến thức thực hành`);

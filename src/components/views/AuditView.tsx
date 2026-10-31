@@ -366,9 +366,15 @@ export const AuditView: React.FC<AuditViewProps> = ({
                   <td className="p-3 text-emerald-700 font-medium">{cls.precision}%</td>
                   <td className="p-3 text-sky-700 font-medium">{cls.recall}%</td>
                   <td className="p-3">
-                    <span className="inline-flex items-center gap-1 rounded bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
-                      <CheckCircle2 className="h-3 w-3" /> Đạt chuẩn ổn định
-                    </span>
+                    {cls.count < 20 ? (
+                      <span className="inline-flex items-center gap-1 rounded bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-800">
+                         Cỡ mẫu nhỏ ({cls.count})
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+                        Phân tích ổn định
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}

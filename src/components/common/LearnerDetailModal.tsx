@@ -35,6 +35,10 @@ export const LearnerDetailModal: React.FC<LearnerDetailModalProps> = ({
   const [interventionOutcome, setInterventionOutcome] = useState<string>(review?.intervention_outcome || '');
 
   const handleSave = () => {
+    if (interventionStatus === 'RESOLVED' && (!interventionOutcome || interventionOutcome.trim() === '')) {
+      alert('Vui lòng nhập kết quả can thiệp trước khi đánh dấu Đã giải quyết.');
+      return;
+    }
     onSaveReview(learner.learner_id, decision, notes, {
       type: interventionType,
       status: interventionStatus,

@@ -1,63 +1,59 @@
 import { LearnerRaw } from '../types';
 
 export class DataValidator {
-  static validateLearner(data: unknown): { valid: boolean; errors: string[] } {
+  static validateLearner(data: any, existingIds: Set<string>): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
     if (!data || typeof data !== 'object') {
       return { valid: false, errors: ['Dữ liệu không phải là đối tượng hợp lệ'] };
     }
 
-    const item = data as Partial<LearnerRaw>;
-
-    if (!item.learner_id || typeof item.learner_id !== 'string') {
-      errors.push('Thiếu mã định danh học sinh (learner_id)');
+    if (!data.learner_id || typeof data.learner_id !== 'string' || data.learner_id.trim() === '') {
+      errors.push('Thiếu hoặc mã định danh học sinh rỗng');
+    } else if (existingIds.has(data.learner_id)) {
+      errors.push(`Mã định danh bị trùng lặp: ${data.learner_id}`);
     }
 
-    if (!item.name || typeof item.name !== 'string') {
-      errors.push('Thiếu tên học sinh (name)');
+    if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
+      errors.push('Thiếu tên học sinh');
     }
 
-    if (!item.class_name || !['LOP_A', 'LOP_B', 'LOP_C'].includes(item.class_name)) {
-      errors.push('Lớp không hợp lệ (phải là LOP_A, LOP_B hoặc LOP_C)');
+    if (!['LOP_A', 'LOP_B', 'LOP_C'].includes(data.class_name)) {
+      errors.push(`Lớp không hợp lệ: ${data.class_name}`);
     }
 
-    if (!Array.isArray(item.weeks) || item.weeks.length === 0) {
-      errors.push('Thiếu dữ liệu theo tuần (weeks)');
+    if (!Array.isArray(data.weeks) || data.weeks.length !== 6) {
+      errors.push('Thiếu dữ liệu tuần hoặc không đủ 6 tuần học');
     } else {
-      item.weeks.forEach((w, idx) => {
-        if (typeof w.testPassRate !== 'number' || w.testPassRate < 0 || w.testPassRate > 100) {
-          errors.push(`Tuần ${idx + 1}: Tỷ lệ pass test không hợp lệ (0-100)`);
+      data.weeks.forEach((w: any, idx: number) => {
+        if (typeof w.testPassRate !== 'number' || isNaN(w.testPassRate) || w.testPassRate < 0 || w.testPassRate > 100) {
+          errors.push(`Tuần ${idx + 1}: Tỷ lệ pass test không hợp lệ`);
+        }
+        if (typeof w.submissions !== 'number' || isNaN(w.submissions) || w.submissions < 0) {
+          errors.push(`Tuần ${idx + 1}: Số bài nộp không hợp lệ`);
         }
       });
     }
 
-    return {
-      valid: errors.length === 0,
-      errors,
-    };
+    return { valid: errors.length === 0, errors };
   }
 
-  static validateLearnerList(list: unknown): { valid: boolean; validCount: number; errors: string[] } {
+  static validateLearnerList(list: any): { valid: boolean; errors: string[] } {
     if (!Array.isArray(list)) {
-      return { valid: false, validCount: 0, errors: ['Dữ liệu nạp vào phải là mảng danh sách học sinh'] };
+      return { valid: false, errors: ['Dữ liệu không phải là mảng'] };
     }
 
     const allErrors: string[] = [];
-    let validCount = 0;
+    const seenIds = new Set<string>();
 
     list.forEach((item, idx) => {
-      const res = this.validateLearner(item);
+      const res = this.validateLearner(item, seenIds);
       if (!res.valid) {
-        allErrors.push(`Học sinh ở dòng #${idx + 1}: ${res.errors.join('; ')}`);
+        allErrors.push(`Học sinh #${idx + 1} (${item.learner_id || 'Unknown'}): ${res.errors.join('; ')}`);
       } else {
-        validCount++;
+        seenIds.add(item.learner_id);
       }
     });
 
-    return {
-      valid: allErrors.length === 0,
-      validCount,
-      errors: allErrors,
-    };
+    return { valid: allErrors.length === 0, errors: allErrors };
   }
 }

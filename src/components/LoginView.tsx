@@ -27,7 +27,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
             <LogIn className="h-6 w-6" />
           </div>
           <h1 className="text-xl font-bold text-slate-900">Đăng nhập CodeCare</h1>
-          <p className="text-xs text-slate-500 mt-1">Hệ thống mô phỏng giáo viên (demo)</p>
+          <p className="text-xs text-amber-800 bg-amber-50 p-2 rounded mt-2">
+            ⚠️ Chế độ trình diễn – dữ liệu mô phỏng. Không phải hệ thống bảo mật thực tế.
+          </p>
         </div>
 
         {error && <div className="text-[11px] text-rose-600 bg-rose-50 p-2 rounded">{error}</div>}
