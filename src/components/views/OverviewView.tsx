@@ -106,7 +106,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-amber-950">{alertCount}</span>
             <span className="text-xs font-medium text-amber-800">
-              {totalLearners > 0 ? Math.round((alertCount / totalLearners) * 100) : 0}% tổng số người học
+              {learners.length > 0 ? Math.round((alertCount / learners.length) * 100) : 0}% nhóm đang chọn
             </span>
           </div>
           <p className="mt-1 text-xs text-amber-900/80">Cần giáo viên xem xét lý do</p>

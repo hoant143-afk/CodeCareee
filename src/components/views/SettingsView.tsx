@@ -76,10 +76,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
         <div className="border-t border-slate-100 pt-5">
           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wide">
-            2. Giới hạn lỗi cú pháp & logic liên tiếp
+            2. Giới hạn tổng lỗi biên dịch & logic / tuần
           </label>
           <p className="text-xs text-slate-500 mb-2">
-            Số lỗi gặp phải trong một tuần vượt quá con số này báo hiệu học sinh đang bị bế tắc lập trình.
+            Tổng số lỗi cú pháp và logic gặp phải trong một tuần vượt quá con số này báo hiệu học sinh đang bị bế tắc lập trình.
           </p>
           <div className="flex items-center gap-3">
             <input
